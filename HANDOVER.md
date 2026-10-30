@@ -32,7 +32,7 @@ A portfolio website for **Maria Pozdnyakova**, Architectural Designer, BArch (Ho
 | Categories | A project mainly belongs to one list, but can be on both |
 | Project fields | Admin defines them per project (label/value pairs), not hard-coded |
 | Contact form | Saved to Firestore for now. Email sending later (Firebase function/extension or third party) |
-| Image storage | Full image (max 4K) plus a ~900 px thumbnail for list pages |
+| Image storage | Images within 4K (JPEG/PNG/WebP/GIF, under 18 MB) are stored as the untouched original. Larger or other formats are scaled to max 3840 px and re-encoded (WebP q0.95). A 1600 px thumbnail is also stored for list/gallery pages |
 | Deleting | Admin can delete single images and whole projects including all files |
 | Default design | The original. Other themes are selectable in the admin |
 

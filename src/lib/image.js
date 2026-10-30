@@ -3,7 +3,11 @@ import { storage } from '../firebase.js';
 
 // 4K (UHD) long side. Larger originals are scaled down before upload; smaller ones are kept as-is.
 export const MAX_SIDE = 3840;
-export const THUMB_SIDE = 900;
+export const THUMB_SIDE = 1600; // list/gallery images; large enough to stay sharp on high-DPI screens
+const RESIZE_QUALITY = 0.95; // only used when an image has to be scaled down or converted
+const THUMB_QUALITY = 0.88;
+const KEEP_AS_IS = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' };
+const MAX_UPLOAD_BYTES = 18 * 1024 * 1024; // storage.rules allows < 20 MB
 
 function toBlob(canvas, type, quality) {
   return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
@@ -40,11 +44,27 @@ export async function processAndUpload(projectId, file) {
   const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
   try {
     const id = crypto.randomUUID().replace(/-/g, '').slice(0, 16);
-    const full = await render(bitmap, MAX_SIDE, 0.9);
-    const thumb = await render(bitmap, THUMB_SIDE, 0.8);
+
+    // Within 4K and a web-friendly format: upload the original bytes untouched (no quality loss).
+    // Only larger images, other formats (HEIC, TIFF, ...) or very heavy files are re-encoded.
+    const keepExt = KEEP_AS_IS[file.type];
+    const fitsAsIs =
+      keepExt && Math.max(bitmap.width, bitmap.height) <= MAX_SIDE && file.size <= MAX_UPLOAD_BYTES;
+
+    let full;
+    if (fitsAsIs) {
+      full = { blob: file, width: bitmap.width, height: bitmap.height, ext: keepExt };
+    } else {
+      full = await render(bitmap, MAX_SIDE, RESIZE_QUALITY);
+    }
+    const thumb = await render(bitmap, THUMB_SIDE, THUMB_QUALITY);
+
     const path = `projects/${projectId}/${id}.${full.ext}`;
     const thumbPath = `projects/${projectId}/thumbs/${id}.${thumb.ext}`;
-    const [url, thumbUrl] = await Promise.all([put(path, full.blob), put(thumbPath, thumb.blob)]);
+    const [url, thumbUrl] = await Promise.all([
+      put(path, full.blob.type ? full.blob : new Blob([full.blob], { type: file.type })),
+      put(thumbPath, thumb.blob),
+    ]);
     return {
       id,
       name: file.name,
