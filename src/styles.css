@@ -454,11 +454,21 @@ h3 {
 .project-main {
   flex: 3 1 520px;
   min-width: 0;
-}
-.project-main img {
-  width: 100%;
-  height: auto;
+  background: var(--panel);
   border-radius: var(--card-radius);
+  overflow: hidden;
+}
+.project-main .zoom {
+  display: flex;
+  justify-content: center;
+}
+/* Keep the whole picture visible: scale to the column width but never taller than the screen,
+   so portrait images no longer run off the page. */
+.project-main img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: min(85vh, 900px);
 }
 .project-details {
   flex: 1 1 240px;
@@ -495,6 +505,7 @@ h3 {
 }
 .gallery img {
   width: 100%;
+  height: auto; /* the HTML height attribute would otherwise override aspect-ratio */
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: var(--card-radius);
