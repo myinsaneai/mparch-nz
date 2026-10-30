@@ -1,0 +1,20 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Replace with the single admin account's email (same as VITE_ADMIN_EMAIL).
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == 'axces2000@yahoo.com';
+    }
+
+    match /projects/{allPaths=**} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create, update: if isAdmin()
+        && request.resource.contentType.matches('image/.*')
+        && request.resource.size < 20 * 1024 * 1024;
+      allow delete: if isAdmin();
+    }
+  }
+}
