@@ -13,6 +13,7 @@ Public portfolio with a built-in admin at `/admin`. Hosting, database, file stor
   - define your own fields per project (Project Type, Software, ...)
   - drop-zone image upload, drag to reorder images, first image is the cover, delete single images
   - images over 4K (3840 px on the long side) are resized in the browser before upload; a small thumbnail is stored too
+  - arrange each project page visually: drag and resize images (proportions locked) and the details text box (text wraps), saved per project; phones stack in reading order
   - edit site name/subtitle and menus
   - **switch the whole site design on the fly** (Original, Editorial Index, Dark Gallery, Swiss Grid, Soft Studio, Blueprint)
   - read and delete contact form messages (stored in Firestore)

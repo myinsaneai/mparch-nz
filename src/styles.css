@@ -518,6 +518,36 @@ h3 {
   object-fit: cover;
   border-radius: var(--card-radius);
 }
+/* Saved page layout (admin page editor). 96 columns, rows = page width / 96; must match src/lib/layout.js. */
+.layout-wrap {
+  container-type: inline-size;
+  margin: 0 -6px; /* items carry 6px padding each side, so edges line up with the rest of the page */
+}
+.layout-grid {
+  display: grid;
+  grid-template-columns: repeat(96, minmax(0, 1fr));
+  grid-auto-rows: minmax(calc(100cqw / 96), auto);
+}
+.layout-item {
+  padding: 6px;
+  min-width: 0;
+  align-self: start;
+}
+.layout-item img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--card-radius);
+}
+.layout-legend .project-details {
+  margin: 0;
+}
+@container (max-width: 640px) {
+  .layout-grid {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .related {
   margin-top: 72px;
 }
@@ -644,13 +674,13 @@ h3 {
 }
 .field input:focus-visible,
 .field textarea:focus-visible,
-.btn:focus-visible,
+.site-btn:focus-visible,
 .zoom:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-.btn {
+.site-btn {
   min-height: 44px;
   padding: 0 22px;
   border: 0;
@@ -662,11 +692,11 @@ a:focus-visible {
   font-weight: 700;
   cursor: pointer;
 }
-[data-theme='original'] .btn {
+[data-theme='original'] .site-btn {
   background: #333;
   color: #fff;
 }
-.btn:disabled {
+.site-btn:disabled {
   opacity: 0.6;
   cursor: default;
 }

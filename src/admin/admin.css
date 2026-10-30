@@ -406,6 +406,147 @@
   border-radius: 999px;
 }
 
+/* page layout editor */
+.le-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 8px;
+}
+.le-outer {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--a-line);
+  border-radius: 8px;
+  overflow: hidden;
+  /* the page as visitors see it: same colours and fonts as the active design */
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+}
+.le-outer * {
+  font-family: inherit;
+}
+.le-canvas {
+  position: relative;
+}
+.le-guide {
+  position: absolute;
+  background: #e0287d;
+  pointer-events: none;
+  z-index: 6;
+}
+.le-align {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 12px;
+}
+.le-sel {
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: 8px;
+  min-width: 150px;
+}
+.le-align-label {
+  font-size: 12px;
+  color: var(--a-muted);
+  margin: 0 2px 0 8px;
+}
+.le-selected .le-content {
+  box-shadow: 0 0 0 2px #1f4fd8;
+}
+.le-selected .le-legend {
+  outline: 2px solid #1f4fd8;
+  box-shadow: none;
+}
+.le-canvas .react-grid-layout {
+  min-height: 100%;
+}
+.le-item {
+  touch-action: none;
+}
+.le-box {
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+}
+.le-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(31, 79, 216, 0.55);
+  background: var(--panel);
+  cursor: grab;
+}
+.react-draggable-dragging .le-content {
+  cursor: grabbing;
+  box-shadow: 0 0 0 2px #1f4fd8, 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.le-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.le-legend {
+  background: transparent;
+  box-shadow: none;
+  outline: 1px dashed rgba(31, 79, 216, 0.8);
+  outline-offset: -1px;
+  overflow: visible;
+  padding: 0;
+}
+.le-tag {
+  position: absolute;
+  bottom: -15px;
+  left: -1px;
+  z-index: 5;
+  background: #1f4fd8;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1;
+  padding: 3px 6px;
+  border-radius: 0 0 4px 4px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.le-legend-inner {
+  padding: 0;
+}
+.le-legend-inner .project-details {
+  margin: 0;
+}
+.le-item > .react-resizable-handle {
+  opacity: 1;
+  z-index: 4;
+}
+.le-item > .react-resizable-handle::after {
+  right: 8px;
+  bottom: 8px;
+  width: 8px;
+  height: 8px;
+  border-right: 3px solid #1f4fd8;
+  border-bottom: 3px solid #1f4fd8;
+}
+.le-item > .react-resizable-handle-e,
+.le-item > .react-resizable-handle-s {
+  opacity: 0;
+}
+.le-item:hover > .react-resizable-handle-e,
+.le-item:hover > .react-resizable-handle-s {
+  opacity: 0.001;
+}
+.react-grid-item.react-grid-placeholder {
+  background: #1f4fd8;
+  opacity: 0.18;
+}
+
 /* settings */
 .themes {
   display: grid;

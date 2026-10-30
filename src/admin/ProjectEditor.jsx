@@ -6,6 +6,7 @@ import { useSite } from '../context/SiteContext.jsx';
 import { slugify } from '../lib/slug.js';
 import { deleteImageFiles, deleteProjectFiles } from '../lib/image.js';
 import ImageUploader from './ImageUploader.jsx';
+import LayoutEditor from './LayoutEditor.jsx';
 import SortableList from './SortableList.jsx';
 
 export default function ProjectEditor() {
@@ -274,6 +275,15 @@ export default function ProjectEditor() {
             )}
           />
         )}
+      </section>
+
+      <section className="panel">
+        <h2>Page layout</h2>
+        <p className="muted">
+          Arrange the images and the details text on the project page. Changes to the fields and images above show here straight away. The layout has
+          its own Save button; it is separate from “Save changes”.
+        </p>
+        <LayoutEditor project={p} projectId={id} onSaved={(layout) => set({ layout })} />
       </section>
 
       <section className="panel danger-zone">

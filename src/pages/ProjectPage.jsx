@@ -4,6 +4,8 @@ import { useSite } from '../context/SiteContext.jsx';
 import { useProjects } from '../context/ProjectsContext.jsx';
 import usePageTitle from '../hooks/usePageTitle.js';
 import NotFound from './NotFound.jsx';
+import Legend from '../components/Legend.jsx';
+import ProjectLayout from '../components/ProjectLayout.jsx';
 
 function Lightbox({ images, index, onClose, onChange }) {
   const img = images[index];
@@ -65,7 +67,6 @@ export default function ProjectPage() {
   const main = images[0];
   const portrait = Boolean(main && main.width && main.height && main.height > main.width);
   const gallery = images.slice(1);
-  const details = (project.fields || []).filter((f) => f.label && f.value);
 
   const shared = (p) => (p.categories || []).filter((c) => (project.categories || []).includes(c)).length;
   const related = projects
@@ -80,6 +81,11 @@ export default function ProjectPage() {
         {project.location && <p>{project.location}</p>}
       </header>
 
+      {project.layout ? (
+        // Saved with the admin's page editor: the arrangement the admin chose.
+        <ProjectLayout project={project} onOpenImage={setViewer} />
+      ) : (
+        <>
       <div className="project-top">
         <div className={portrait ? 'project-main portrait' : 'project-main'}>
           {main ? (
@@ -96,18 +102,7 @@ export default function ProjectPage() {
             <div className="cover cover-empty" />
           )}
         </div>
-        <dl className="project-details">
-          {details.map((f, i) => (
-            <div key={i}>
-              <dt>{f.label}:</dt> <dd>{f.value}</dd>
-            </div>
-          ))}
-          {project.year && (
-            <div>
-              <dt>Year Created:</dt> <dd>{project.year}</dd>
-            </div>
-          )}
-        </dl>
+        <Legend project={project} />
       </div>
 
       {gallery.length > 0 && (
@@ -118,6 +113,8 @@ export default function ProjectPage() {
             </button>
           ))}
         </div>
+      )}
+        </>
       )}
 
       {related.length > 0 && (

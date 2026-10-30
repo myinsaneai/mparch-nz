@@ -60,7 +60,7 @@ export default function ContactPage({ menu }) {
             <input id="c-website" type="text" tabIndex={-1} autoComplete="off" value={form.website} onChange={update('website')} />
           </div>
           <div>
-            <button type="submit" className="btn" disabled={status === 'sending'}>
+            <button type="submit" className="site-btn" disabled={status === 'sending'}>
               {status === 'sending' ? 'Sending…' : 'Submit'}
             </button>
           </div>
