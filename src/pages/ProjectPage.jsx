@@ -63,6 +63,7 @@ export default function ProjectPage() {
 
   const images = project.images || [];
   const main = images[0];
+  const portrait = Boolean(main && main.width && main.height && main.height > main.width);
   const gallery = images.slice(1);
   const details = (project.fields || []).filter((f) => f.label && f.value);
 
@@ -80,10 +81,16 @@ export default function ProjectPage() {
       </header>
 
       <div className="project-top">
-        <div className="project-main">
+        <div className={portrait ? 'project-main portrait' : 'project-main'}>
           {main ? (
             <button type="button" className="zoom" onClick={() => setViewer(0)} aria-label="Open image">
-              <img src={main.url} alt={project.title} width={main.width} height={main.height} />
+              <img
+                src={main.url}
+                alt={project.title}
+                width={main.width}
+                height={main.height}
+                style={portrait ? { height: `min(85vh, 900px, ${main.height}px)` } : undefined}
+              />
             </button>
           ) : (
             <div className="cover cover-empty" />

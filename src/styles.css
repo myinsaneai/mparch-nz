@@ -454,21 +454,29 @@ h3 {
 .project-main {
   flex: 3 1 520px;
   min-width: 0;
-  background: var(--panel);
-  border-radius: var(--card-radius);
-  overflow: hidden;
 }
-.project-main .zoom {
-  display: flex;
-  justify-content: center;
-}
-/* Keep the whole picture visible: scale to the column width but never taller than the screen,
-   so portrait images no longer run off the page. */
+/* Landscape: fill the column. Never taller than the screen. */
 .project-main img {
-  width: auto;
-  max-width: 100%;
+  width: 100%;
   height: auto;
   max-height: min(85vh, 900px);
+  object-fit: contain;
+  object-position: left top;
+  border-radius: var(--card-radius);
+}
+/* Portrait: the column is only as wide as the picture (height is set inline in ProjectPage.jsx),
+   so there are no empty side margins and the details sit right next to it. */
+.project-main.portrait {
+  flex: 0 1 auto;
+  max-width: 100%;
+}
+.project-main.portrait .zoom {
+  width: auto;
+}
+.project-main.portrait img {
+  width: auto;
+  max-width: 100%;
+  max-height: none;
 }
 .project-details {
   flex: 1 1 240px;
