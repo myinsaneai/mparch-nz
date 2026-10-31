@@ -529,14 +529,26 @@ h3 {
   grid-auto-rows: minmax(calc(100cqw / 96), auto);
 }
 .layout-item {
+  position: relative;
   padding: 6px;
   min-width: 0;
-  align-self: start;
+  align-self: stretch;
+}
+/* Images fill exactly the cells they were given (like the editor), so they scale with the page and line up. */
+.layout-item .zoom {
+  position: absolute;
+  inset: 6px;
+  width: auto;
 }
 .layout-item img {
+  display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   border-radius: var(--card-radius);
+}
+.layout-legend {
+  align-self: start;
 }
 .layout-legend .project-details {
   margin: 0;
@@ -545,6 +557,16 @@ h3 {
   .layout-grid {
     display: flex;
     flex-direction: column;
+  }
+  .layout-item {
+    align-self: auto;
+  }
+  .layout-item .zoom {
+    position: static;
+  }
+  .layout-item img {
+    height: auto;
+    object-fit: initial;
   }
 }
 
