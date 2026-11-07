@@ -607,3 +607,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Items may overlap (nothing is pushed around); the selected one is drawn on top. */
+.react-grid-item.le-selected-item {
+  z-index: 3;
+}

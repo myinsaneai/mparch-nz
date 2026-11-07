@@ -17,8 +17,9 @@ export const MIN_IMAGE_W = 12;
 export const MIN_LEGEND_W = 16;
 export const ITEM_PAD = 6; // px padding inside every item (gap between neighbours = 2 x this)
 
-/** Width of the page area the editor draws at (matches the public site at >= 1280 px wide). */
-export const EDIT_WIDTH = 1232 + ITEM_PAD * 2;
+/** Width of the page area the editor draws at (matches the public site at >= 908 px wide). */
+export const PAGE_WIDTH = 860; // content width of the public site, keep in sync with .site in styles.css
+export const EDIT_WIDTH = PAGE_WIDTH + ITEM_PAD * 2;
 
 export function aspectOf(img) {
   return img && img.width && img.height ? img.width / img.height : 1.5;

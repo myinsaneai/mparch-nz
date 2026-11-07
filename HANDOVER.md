@@ -144,10 +144,10 @@ First run on a fresh Firebase project: sign in at `/admin`, open **Site, menus &
 
 Each project page can be arranged visually in the admin (Project editor > "Page layout"). Library: `react-grid-layout` v2 (MIT).
 
-- **What can be arranged:** every image, plus the details text (fields + "Year Created") as one rectangle (`id: 'legend'`). Items are dragged and resized on a fine 96 x 96 grid (about 13 px steps on a 1244 px canvas; one row is 1/96 of the page width), drawn with vertical and horizontal grid lines.
+- **What can be arranged:** every image, plus the details text (fields + "Year Created") as one rectangle (`id: 'legend'`). Items are dragged and resized on a fine 96 x 96 grid (about 9 px steps on an 872 px canvas; one row is 1/96 of the page width), drawn with vertical and horizontal grid lines.
 - **Images** keep their proportions on resize (built-in `aspectRatio` constraint, and `rowsForImage()` re-derives the height from the width on every load, so it cannot drift).
 - **Text box** keeps the site's text style, wraps inside its width, and can never be made shorter than its text (measured in the editor). On the public page its rows are `minmax(row, auto)`, so on narrow screens the box grows instead of clipping.
-- **Editor fidelity:** the canvas is drawn at 1244 px (the live content width plus item padding) and scaled down to fit, so text wraps like on a desktop visitor's screen. It uses the active theme's colours and fonts.
+- **Editor fidelity:** the canvas is drawn at 872 px (the 860 px content width plus item padding; `PAGE_WIDTH` in layout.js, keep in sync with `.site` in styles.css) and scaled down to fit, so text wraps like on a desktop visitor's screen. It uses the active theme's colours and fonts.
 - **Public rendering:** `src/components/ProjectLayout.jsx` is a CSS grid with the same 96 columns and row size (`container-type: inline-size`, rows `calc(100cqw / 96)`). Below 640 px width everything stacks in reading order (top to bottom, then left to right).
 - **Backwards compatible:** a project with no saved `layout` still renders the original fixed arrangement (`ProjectPage.jsx` legacy branch). The layout is only used after the admin presses "Save layout".
 - **Self-healing:** `normalizeLayout()` drops items for deleted images and appends new images at the bottom, three per row, so adding or deleting images never breaks a saved layout.
@@ -168,7 +168,7 @@ The stored numbers are plain cell units, so nothing has to be redone per project
 ### Known limits of the layout editor
 
 - Desktop layout only; phones always stack. A separate hand-made phone layout is not supported yet.
-- Positions snap to the grid (about 13 px steps on a 1244 px canvas). Dragging an item onto another pushes the other down.
+- Positions snap to the grid (about 9 px steps on an 872 px canvas). Items may overlap and nothing is pushed around when you move one (`noOverlapCompactor`); the selected item is drawn on top.
 - A new image is added at the bottom of the layout, not where the admin last clicked.
 
 ## 12. Working with Claude on this

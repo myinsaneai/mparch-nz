@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactGridLayout from 'react-grid-layout';
-import { aspectRatio, createScaledStrategy, gridBounds, minMaxSize, noCompactor } from 'react-grid-layout/core';
+import { aspectRatio, createScaledStrategy, gridBounds, minMaxSize, noOverlapCompactor } from 'react-grid-layout/core';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
@@ -85,7 +85,7 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [membershipKey]);
 
-  // --- fit the 1244 px wide page into the available width (scaled, so wrapping matches the live site)
+  // --- fit the 872 px wide page into the available width (scaled, so wrapping matches the live site)
   const wrapRef = useRef(null);
   const [avail, setAvail] = useState(EDIT_WIDTH);
   useEffect(() => {
@@ -322,7 +322,7 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
             gridConfig={{ cols: COLS, rowHeight: ROW_H, margin: [0, 0], containerPadding: [0, 0] }}
             dragConfig={{ enabled: true, threshold: 3 }}
             resizeConfig={{ enabled: true, handles: ['se'] }}
-            compactor={noCompactor}
+            compactor={noOverlapCompactor}
             constraints={[gridBounds, minMaxSize, neighbourSnap]}
             positionStrategy={positionStrategy}
             onLayoutChange={onLayoutChange}
@@ -337,7 +337,7 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
               const isSel = it.id === selectedId;
               if (it.id === LEGEND_ID) {
                 return (
-                  <div key={it.id} className="le-item" onMouseDownCapture={() => setSelectedId(it.id)}>
+                  <div key={it.id} className={`le-item${it.id === selectedId ? " le-selected-item" : ""}`} onMouseDownCapture={() => setSelectedId(it.id)}>
                     <div className={isSel ? 'le-box le-selected' : 'le-box'} onClick={() => setSelectedId(it.id)}>
                       <div className="le-content le-legend">
                         <span className="le-tag">Details text</span>
@@ -352,7 +352,7 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
               const img = imgById.get(it.id);
               if (!img) return <div key={it.id} />;
               return (
-                <div key={it.id} className="le-item" onMouseDownCapture={() => setSelectedId(it.id)}>
+                <div key={it.id} className={`le-item${it.id === selectedId ? " le-selected-item" : ""}`} onMouseDownCapture={() => setSelectedId(it.id)}>
                   <div className={isSel ? 'le-box le-selected' : 'le-box'} onClick={() => setSelectedId(it.id)}>
                     <div className="le-content">
                       <img src={img.thumbUrl || img.url} alt={img.name || ''} draggable={false} />
