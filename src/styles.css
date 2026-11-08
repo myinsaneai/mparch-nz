@@ -519,15 +519,15 @@ h3 {
   object-fit: cover;
   border-radius: var(--card-radius);
 }
-/* Saved page layout (admin page editor). 96 columns, rows = page width / 96; must match src/lib/layout.js. */
+/* Saved page layout (admin page editor). 192 columns, rows = page width / 192; must match src/lib/layout.js. */
 .layout-wrap {
   container-type: inline-size;
   margin: 0 -6px; /* items carry 6px padding each side, so edges line up with the rest of the page */
 }
 .layout-grid {
   display: grid;
-  grid-template-columns: repeat(96, minmax(0, 1fr));
-  grid-auto-rows: minmax(calc(100cqw / 96), auto);
+  grid-template-columns: repeat(192, minmax(0, 1fr));
+  grid-auto-rows: minmax(calc(100cqw / 192), auto);
 }
 .layout-item {
   position: relative;

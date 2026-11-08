@@ -144,16 +144,16 @@ First run on a fresh Firebase project: sign in at `/admin`, open **Site, menus &
 
 Each project page can be arranged visually in the admin (Project editor > "Page layout"). Library: `react-grid-layout` v2 (MIT).
 
-- **What can be arranged:** every image, plus the details text (fields + "Year Created") as one rectangle (`id: 'legend'`). Items are dragged and resized on a fine 96 x 96 grid (about 9 px steps on an 872 px canvas; one row is 1/96 of the page width), drawn with vertical and horizontal grid lines.
+- **What can be arranged:** every image, plus the details text (fields + "Year Created") as one rectangle (`id: 'legend'`). Items are dragged and resized on a fine 192 x 192 grid (about 4.5 px steps on an 872 px canvas; one row is 1/192 of the page width), drawn with vertical and horizontal grid lines.
 - **Images** keep their proportions on resize (built-in `aspectRatio` constraint, and `rowsForImage()` re-derives the height from the width on every load, so it cannot drift).
 - **Text box** keeps the site's text style, wraps inside its width, and can never be made shorter than its text (measured in the editor). On the public page its rows are `minmax(row, auto)`, so on narrow screens the box grows instead of clipping.
 - **Editor fidelity:** the canvas is drawn at 872 px (the 860 px content width plus item padding; `PAGE_WIDTH` in layout.js, keep in sync with `.site` in styles.css) and scaled down to fit, so text wraps like on a desktop visitor's screen. It uses the active theme's colours and fonts.
-- **Public rendering:** `src/components/ProjectLayout.jsx` is a CSS grid with the same 96 columns and row size (`container-type: inline-size`, rows `calc(100cqw / 96)`). Below 640 px width everything stacks in reading order (top to bottom, then left to right).
+- **Public rendering:** `src/components/ProjectLayout.jsx` is a CSS grid with the same 192 columns and row size (`container-type: inline-size`, rows `calc(100cqw / 192)`). Below 640 px width everything stacks in reading order (top to bottom, then left to right).
 - **Backwards compatible:** a project with no saved `layout` still renders the original fixed arrangement (`ProjectPage.jsx` legacy branch). The layout is only used after the admin presses "Save layout".
 - **Self-healing:** `normalizeLayout()` drops items for deleted images and appends new images at the bottom, three per row, so adding or deleting images never breaks a saved layout.
-- **Snapping and guides:** while moving or resizing, edges and centres snap to neighbours within 3 cells (`neighbourSnap` constraint in `LayoutEditor.jsx`, helpers `snapPosition/snapSize/alignmentGuides` in `layout.js`) and pink guide lines show what lines up.
+- **Snapping and guides:** while moving or resizing, edges and centres snap to neighbours within 3 cells (about 13 px; can be turned off with the "Snap to neighbours" checkbox or by holding Alt) (`neighbourSnap` constraint in `LayoutEditor.jsx`, helpers `snapPosition/snapSize/alignmentGuides` in `layout.js`) and pink guide lines show what lines up.
 - **Align buttons:** click an item to select it, then Left / Centre / Right (against the nearest item above or below) or Top / Middle / Bottom (against the nearest item beside it). `alignNeighbour` / `alignedPosition` in `layout.js`.
-- **Old layouts:** layouts saved with another `cols`/`rowDiv` (the first release used 24 x 48) are scaled to 96 x 96 automatically by `rescale()` in `normalizeLayout`.
+- **Old layouts:** layouts saved with another `cols`/`rowDiv` (the first release used 24 x 48) are scaled to 192 x 192 automatically by `rescale()` in `normalizeLayout`.
 - **Scaled canvas drag:** react-grid-layout's `createScaledStrategy` ignores the canvas offset on the page, so `LayoutEditor.jsx` wraps it with its own `calcDragPosition`. Keep that if you upgrade the library.
 - **CSS note:** the public button class is `.site-btn` (it used to be `.btn`, which leaked into the admin and made admin buttons unreadable).
 - **Layout is saved separately** from "Save changes" (its own button), and writes only the `layout` field.
@@ -168,7 +168,7 @@ The stored numbers are plain cell units, so nothing has to be redone per project
 ### Known limits of the layout editor
 
 - Desktop layout only; phones always stack. A separate hand-made phone layout is not supported yet.
-- Positions snap to the grid (about 9 px steps on an 872 px canvas). Items may overlap and nothing is pushed around when you move one (`noOverlapCompactor`); the selected item is drawn on top.
+- Positions snap to the grid (about 4.5 px steps on an 872 px canvas). Items may overlap and nothing is pushed around when you move one (`noOverlapCompactor`); the selected item is drawn on top.
 - A new image is added at the bottom of the layout, not where the admin last clicked.
 
 ## 12. Working with Claude on this

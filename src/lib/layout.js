@@ -1,20 +1,20 @@
 // Project page layout model.
 //
 // A layout is stored on the project document as:
-//   { v: 1, mode: 'grid', cols: 96, rowDiv: 96, items: [{ id, x, y, w, h }] }
+//   { v: 1, mode: 'grid', cols: 192, rowDiv: 192, items: [{ id, x, y, w, h }] }
 //
 // `id` is an image id, or LEGEND_ID for the details text box. Units are grid cells:
 // x/w count columns (of `cols`), y/h count rows; one row is 1/rowDiv of the page width.
-// With 96 x 96 a cell is about 13 px on a desktop screen. Because positions are plain numbers in these
+// With 192 x 192 a cell is about 4.5 px on a desktop screen. Because positions are plain numbers in these
 // units, a finer grid or a free-positioning mode can reuse them (see normalizeLayout: older layouts
 // saved with other cols/rowDiv values are scaled automatically).
 
 export const LEGEND_ID = 'legend';
-export const COLS = 96;
-export const ROW_DIV = 96; // row height = page width / ROW_DIV
+export const COLS = 192;
+export const ROW_DIV = 192; // row height = page width / ROW_DIV
 export const ROWS_PER_COL = ROW_DIV / COLS;
-export const MIN_IMAGE_W = 12;
-export const MIN_LEGEND_W = 16;
+export const MIN_IMAGE_W = 24;
+export const MIN_LEGEND_W = 32;
 export const ITEM_PAD = 6; // px padding inside every item (gap between neighbours = 2 x this)
 
 /** Width of the page area the editor draws at (matches the public site at >= 908 px wide). */
@@ -27,7 +27,7 @@ export function aspectOf(img) {
 
 /** Rows an image needs at `w` columns so the box has the image's own proportions. */
 export function rowsForImage(w, img) {
-  return Math.max(4, Math.round((w * ROWS_PER_COL) / aspectOf(img)));
+  return Math.max(8, Math.round((w * ROWS_PER_COL) / aspectOf(img)));
 }
 
 function legendHasContent(project) {
@@ -37,8 +37,8 @@ function legendHasContent(project) {
 /** Approximate rows the legend needs at `w` columns (the editor measures the real value). */
 function legendRows(project, w) {
   const lines = (project.fields || []).filter((f) => f.label && f.value).length + (project.year ? 1 : 0);
-  const perLine = w >= 32 ? 1 : 2;
-  return Math.max(8, Math.ceil((lines * perLine * 22 + 16) / (EDIT_WIDTH / ROW_DIV)));
+  const perLine = w >= 64 ? 1 : 2;
+  return Math.max(16, Math.ceil((lines * perLine * 22 + 16) / (EDIT_WIDTH / ROW_DIV)));
 }
 
 /** The first-time arrangement: big image + legend beside it, remaining images in rows of three. */
@@ -51,7 +51,7 @@ export function defaultLayout(project) {
 
   if (main) {
     const portrait = aspectOf(main) < 1;
-    const w = portrait ? 40 : 64;
+    const w = portrait ? 80 : 128;
     const h = rowsForImage(w, main);
     items.push({ id: main.id, x: 0, y: 0, w, h });
     if (hasLegend) {
@@ -59,12 +59,12 @@ export function defaultLayout(project) {
     }
     y = h;
   } else if (hasLegend) {
-    items.push({ id: LEGEND_ID, x: 0, y: 0, w: 32, h: legendRows(project, 32) });
+    items.push({ id: LEGEND_ID, x: 0, y: 0, w: 64, h: legendRows(project, 64) });
     y = items[0].h;
   }
 
   const rest = images.slice(1);
-  const w = 32;
+  const w = 64;
   let rowH = 0;
   rest.forEach((img, i) => {
     const col = i % 3;
@@ -110,7 +110,7 @@ export function normalizeLayout(project, saved) {
     if (it.id === LEGEND_ID) {
       if (!hasLegend) continue;
       const w = clamp(Math.round(it.w), MIN_LEGEND_W, COLS);
-      items.push({ id: it.id, x: clamp(Math.round(it.x), 0, COLS - w), y: Math.max(0, Math.round(it.y)), w, h: Math.max(4, Math.round(it.h)) });
+      items.push({ id: it.id, x: clamp(Math.round(it.x), 0, COLS - w), y: Math.max(0, Math.round(it.y)), w, h: Math.max(8, Math.round(it.h)) });
     } else {
       const img = byId.get(it.id);
       if (!img) continue;
@@ -130,7 +130,7 @@ export function normalizeLayout(project, saved) {
     let y = items.reduce((m, i) => Math.max(m, i.y + i.h), 0);
     let col = 0;
     let rowH = 0;
-    const w = 32;
+    const w = 64;
     missing.forEach((m) => {
       const h = m.id === LEGEND_ID ? legendRows(project, w) : rowsForImage(w, m.img);
       if (col >= 3) {
@@ -165,7 +165,7 @@ export function sameLayout(a, b) {
 
 // ---------------------------------------------------------------- alignment helpers
 
-export const SNAP_CELLS = 3; // how close (in cells, about 39 px) an edge must be to snap to a neighbour
+export const SNAP_CELLS = 3; // how close (in cells, about 13 px) an edge must be to snap to a neighbour
 
 /**
  * Where `start` (an item's x or y) lands if its start edge, centre or end edge is within SNAP_CELLS of a

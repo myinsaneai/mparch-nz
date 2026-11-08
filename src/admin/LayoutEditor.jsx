@@ -26,16 +26,21 @@ import {
   snapSize,
 } from '../lib/layout.js';
 
-const CELL = EDIT_WIDTH / COLS; // px per column at full size (about 13)
+const CELL = EDIT_WIDTH / COLS; // px per column at full size (about 4.5)
 const ROW_H = EDIT_WIDTH / ROW_DIV; // px per row at full size
-const EXTRA_ROWS = 28; // empty space below the lowest item so things can be dragged lower
+const EXTRA_ROWS = 56; // empty space below the lowest item so things can be dragged lower
 
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+
+// Snapping can be switched off with the checkbox, or temporarily by holding Alt.
+const snapState = { on: true, alt: false };
+const snapping = () => snapState.on && !snapState.alt;
 
 // Snaps a moved or resized item to the edges and centres of the items around it.
 const neighbourSnap = {
   name: 'neighbourSnap',
   constrainPosition(item, x, y, ctx) {
+    if (!snapping()) return { x, y };
     const others = ctx.layout.filter((l) => l.i !== item.i);
     return {
       x: clamp(snapPosition(x, item.w, others, 'x'), 0, COLS - item.w),
@@ -43,6 +48,7 @@ const neighbourSnap = {
     };
   },
   constrainSize(item, w, h, handle, ctx) {
+    if (!snapping()) return { w, h };
     const others = ctx.layout.filter((l) => l.i !== item.i);
     const nw = handle.includes('e') ? snapSize(item.x, w, others, 'x') : w;
     const nh = handle.includes('s') ? snapSize(item.y, h, others, 'y') : h;
@@ -100,6 +106,30 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
   const scale = Math.min(1, avail / EDIT_WIDTH) || 1;
   // react-grid-layout's own scaled strategy ignores where the (scaled) canvas sits on the page, so the dragged
   // item would jump by that offset. This one measures the position relative to the canvas.
+  const [snapOn, setSnapOn] = useState(true);
+  useEffect(() => {
+    snapState.on = snapOn;
+  }, [snapOn]);
+  useEffect(() => {
+    const down = (e) => {
+      if (e.key === 'Alt') snapState.alt = true;
+    };
+    const up = (e) => {
+      if (e.key === 'Alt') snapState.alt = false;
+    };
+    const reset = () => {
+      snapState.alt = false;
+    };
+    window.addEventListener('keydown', down);
+    window.addEventListener('keyup', up);
+    window.addEventListener('blur', reset);
+    return () => {
+      window.removeEventListener('keydown', down);
+      window.removeEventListener('keyup', up);
+      window.removeEventListener('blur', reset);
+      snapState.alt = false;
+    };
+  }, []);
   const canvasRef = useRef(null);
   const positionStrategy = useMemo(() => {
     const base = createScaledStrategy(scale);
@@ -118,7 +148,7 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
   useEffect(() => {
     const el = legendRef.current;
     if (!el) return undefined;
-    const measure = () => setLegendNeed(Math.max(4, Math.ceil((el.offsetHeight + ITEM_PAD * 2 + 2) / ROW_H)));
+    const measure = () => setLegendNeed(Math.max(8, Math.ceil((el.offsetHeight + ITEM_PAD * 2 + 2) / ROW_H)));
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
@@ -209,7 +239,7 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
 
   const dirty = !saved || !sameLayout({ items }, saved);
   const bottom = items.reduce((m, i) => Math.max(m, i.y + i.h), 0);
-  const rows = Math.max(80, bottom + EXTRA_ROWS);
+  const rows = Math.max(160, bottom + EXTRA_ROWS);
 
   const save = async () => {
     setBusy(true);
@@ -239,8 +269,9 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
   }
 
   // light lines every 2 cells, stronger lines every 8 cells, both directions
-  const minor = 'rgba(127, 127, 127, 0.14)';
-  const major = 'rgba(127, 127, 127, 0.3)';
+  const cell = 'rgba(127, 127, 127, 0.08)';
+  const minor = 'rgba(127, 127, 127, 0.16)';
+  const major = 'rgba(127, 127, 127, 0.32)';
   const lines = (c) => `linear-gradient(to right, ${c} 1px, transparent 1px), linear-gradient(to bottom, ${c} 1px, transparent 1px)`;
 
   return (
@@ -264,13 +295,16 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
         </p>
       )}
       <p className="muted small-text">
-        Drag items to move them. Edges and centres snap to the items around them and pink guide lines show what lines up. Drag the corner of an image to
+        Drag items to move them. Edges and centres snap to the items around them and pink guide lines show what lines up (untick “Snap to neighbours”, or hold Alt while dragging, for free movement in 4.5 px steps). Drag the corner of an image to
         resize it (its proportions stay fixed); the details text is a box you can resize from its corner or edges, and its text wraps inside. Click an
         item to select it, then use the align buttons. On phones everything stacks top to bottom in the order shown (by row, then column).
       </p>
 
       <div className="le-align" role="group" aria-label="Align the selected item">
         <span className="le-sel">{selected ? `Selected: ${selected.id === LEGEND_ID ? 'details text' : `image ${images.findIndex((i) => i.id === selected.id) + 1}`}` : 'Click an item to align it'}</span>
+        <label className="le-snap" title="Hold Alt while dragging to turn snapping off for a moment">
+          <input type="checkbox" checked={snapOn} onChange={(e) => setSnapOn(e.target.checked)} /> Snap to neighbours
+        </label>
         <span className="le-align-label">Horizontal</span>
         {ALIGN_BUTTONS.filter((b) => b.axis === 'horizontal').map((b) => (
           <button
@@ -312,8 +346,8 @@ export default function LayoutEditor({ project, projectId, onSaved }) {
             height: rows * ROW_H,
             transform: `scale(${scale})`,
             transformOrigin: 'top left',
-            backgroundImage: `${lines(minor)}, ${lines(major)}`,
-            backgroundSize: `${CELL * 2}px ${ROW_H * 2}px, ${CELL * 2}px ${ROW_H * 2}px, ${CELL * 8}px ${ROW_H * 8}px, ${CELL * 8}px ${ROW_H * 8}px`,
+            backgroundImage: `${lines(cell)}, ${lines(minor)}, ${lines(major)}`,
+            backgroundSize: `${CELL}px ${ROW_H}px, ${CELL}px ${ROW_H}px, ${CELL * 4}px ${ROW_H * 4}px, ${CELL * 4}px ${ROW_H * 4}px, ${CELL * 16}px ${ROW_H * 16}px, ${CELL * 16}px ${ROW_H * 16}px`,
           }}
         >
           <ReactGridLayout

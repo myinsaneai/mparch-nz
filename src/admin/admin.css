@@ -612,3 +612,12 @@
 .react-grid-item.le-selected-item {
   z-index: 3;
 }
+
+.le-snap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-right: 12px;
+  cursor: pointer;
+}

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { COLS, LEGEND_ID, normalizeLayout, stackOrder } from '../lib/layout.js';
 import Legend from './Legend.jsx';
 
-// Public rendering of a saved layout. A CSS grid with the same 96 columns / row size as the editor.
+// Public rendering of a saved layout. A CSS grid with the same 192 columns / row size as the editor.
 // Rows are `minmax(row, auto)`, so a text box that wraps onto more lines on a narrow screen simply
 // makes its rows taller instead of overflowing. Below 640 px everything stacks in reading order.
 export default function ProjectLayout({ project, onOpenImage }) {
