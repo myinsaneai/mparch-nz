@@ -4,6 +4,11 @@ Portfolio website for Maria Pozdnyakova (architectural designer, New Zealand). R
 
 **Read `HANDOVER.md` first**: architecture, data model, security model, layout editor, setup and known gaps. Keep it up to date when you change behaviour.
 
+## Working in a fresh cloud session (repo comes from git)
+- The repo is `myinsaneai/mparch-nz` on GitHub (private). The session has no `.env`, no Firebase login and no secrets, and must not ask for them. `npm install` and `npm run build` work without them; the Firebase-backed pages cannot load real data, so to check UI changes use a small throw-away Vite harness with mock project data (as done for the layout editor: mock images, no Firebase), and delete it afterwards.
+- Work on a branch, not `main`; commit and push only when the owner asks, and tell the owner which branch to pull. The owner runs `npm run dev` and `npm run deploy` on their own machine.
+- Before starting, read `HANDOVER.md` fully; update it in the same commit when behaviour changes.
+
 ## Commands
 - `npm install`, `npm run dev` (local), `npm run build` (must pass before finishing), `npm run deploy` (build + `firebase deploy`, only when the owner asks).
 - There is no test suite and no linter; verify UI changes by running the dev server and looking at the page (Playwright is a good way to check drag/resize behaviour).

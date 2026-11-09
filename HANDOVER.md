@@ -181,7 +181,11 @@ The stored numbers are plain cell units, so nothing has to be redone per project
 
 ## 12. Working with Claude on this
 
-`CLAUDE.md` in the repo root is read automatically by Claude Code (VS Code extension or CLI) and points back to this file. For a new chat on claude.ai, attach this file and say what to change. Useful context:
-- Themes: add a `[data-theme='name']` block in `src/styles.css` and an entry in `src/lib/themes.js`.
-- New menu types need a branch in `src/pages/MenuPage.jsx` and an option in `SettingsAdmin.jsx` (`KINDS`).
-- Keep secrets out of chat and out of git: `.env` values, admin password, any service-account JSON.
+The git repository is the single source of truth. A new Claude session should be given the repo (GitHub `myinsaneai/mparch-nz`, private) and start by reading this file and `CLAUDE.md`, which carries the working rules and traps. `CLAUDE.md` is also loaded automatically by Claude Code if it is ever used.
+
+- A cloud session has no `.env` and no Firebase login, by design. It can `npm install` and `npm run build`, and check UI with a throw-away mock-data harness. Real data, `npm run dev` against Firebase and `npm run deploy` happen on the owner's machine after pulling.
+- Ask Claude to work on a branch and to update this handover in the same commit as any behaviour change.
+- Useful context:
+  - Themes: add a `[data-theme='name']` block in `src/styles.css` and an entry in `src/lib/themes.js`.
+  - New menu types need a branch in `src/pages/MenuPage.jsx` and an option in `SettingsAdmin.jsx` (`KINDS`).
+  - Keep secrets out of chat and out of git: `.env` values, admin password, any service-account JSON.
