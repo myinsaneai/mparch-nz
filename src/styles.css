@@ -11,8 +11,8 @@
   --line: #e6e6e6;
   --accent: #111111;
   --on-accent: #ffffff;
-  --font-body: 'Archivo Narrow', system-ui, sans-serif;
-  --font-display: 'Archivo Narrow', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-display: 'Barlow', system-ui, sans-serif;
   --card-radius: 0px;
   --btn-radius: 3px;
   --h1-size: 48px;
@@ -22,7 +22,7 @@
   --hero-align: center;
   --top-rule: 3px solid #e6e6e6;
   --caption-title: 14px;
-  --input-font: 'Times New Roman', Times, serif;
+  --input-font: 'Barlow', system-ui, sans-serif;
 }
 
 [data-theme='editorial'] {
@@ -33,8 +33,8 @@
   --line: #111111;
   --accent: #111111;
   --on-accent: #ffffff;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-display: 'Barlow', system-ui, sans-serif;
   --card-radius: 0px;
   --btn-radius: 0px;
   --h1-size: 120px;
@@ -43,7 +43,7 @@
   --hero-align: left;
   --top-rule: 0;
   --caption-title: 16px;
-  --input-font: 'Inter', system-ui, sans-serif;
+  --input-font: 'Barlow', system-ui, sans-serif;
 }
 
 [data-theme='dark'] {
@@ -54,8 +54,8 @@
   --line: #2c2c2e;
   --accent: #e8b04a;
   --on-accent: #0f0f10;
-  --font-body: 'Manrope', system-ui, sans-serif;
-  --font-display: 'Manrope', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-display: 'Barlow', system-ui, sans-serif;
   --card-radius: 6px;
   --btn-radius: 999px;
   --h1-size: 64px;
@@ -64,7 +64,7 @@
   --hero-align: left;
   --top-rule: 0;
   --caption-title: 17px;
-  --input-font: 'Manrope', system-ui, sans-serif;
+  --input-font: 'Barlow', system-ui, sans-serif;
 }
 
 [data-theme='swiss'] {
@@ -75,8 +75,8 @@
   --line: #111111;
   --accent: #d62d0f;
   --on-accent: #ffffff;
-  --font-body: 'Archivo', system-ui, sans-serif;
-  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-display: 'Barlow', system-ui, sans-serif;
   --card-radius: 0px;
   --btn-radius: 0px;
   --h1-size: 96px;
@@ -86,7 +86,7 @@
   --hero-align: left;
   --top-rule: 0;
   --caption-title: 24px;
-  --input-font: 'Archivo', system-ui, sans-serif;
+  --input-font: 'Barlow', system-ui, sans-serif;
 }
 
 [data-theme='soft'] {
@@ -97,8 +97,8 @@
   --line: #cdd6c4;
   --accent: #1f3a2e;
   --on-accent: #f8faf4;
-  --font-body: 'DM Sans', system-ui, sans-serif;
-  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-display: 'Barlow', system-ui, sans-serif;
   --card-radius: 28px;
   --btn-radius: 999px;
   --h1-size: 80px;
@@ -107,7 +107,7 @@
   --hero-align: center;
   --top-rule: 0;
   --caption-title: 26px;
-  --input-font: 'DM Sans', system-ui, sans-serif;
+  --input-font: 'Barlow', system-ui, sans-serif;
 }
 
 [data-theme='blueprint'] {
@@ -118,8 +118,8 @@
   --line: #3b5f94;
   --accent: #ffd166;
   --on-accent: #0b2545;
-  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-display: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-display: 'Barlow', system-ui, sans-serif;
   --card-radius: 0px;
   --btn-radius: 0px;
   --h1-size: 44px;
@@ -128,7 +128,7 @@
   --hero-align: left;
   --top-rule: 0;
   --caption-title: 14px;
-  --input-font: 'IBM Plex Mono', ui-monospace, monospace;
+  --input-font: 'Barlow', system-ui, sans-serif;
 }
 
 /* ------------------------------------------------------------------ base */
@@ -201,7 +201,7 @@ h3 {
   color: var(--fg);
 }
 .site-nav a.active {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent);
 }
 [data-theme='original'] .site-nav a.active {
@@ -249,7 +249,7 @@ h3 {
 
 .page-title {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   font-size: 24px;
   padding: 56px 0 40px;
@@ -285,9 +285,25 @@ h3 {
   text-align: center;
   padding: 20px;
 }
-.row:hover .caption h2 {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.row .caption {
+  transition: background-color 0.15s, color 0.15s;
+}
+.row .cover {
+  transition: filter 0.15s;
+}
+.row:hover .caption,
+.row:focus-visible .caption {
+  background: var(--fg);
+  color: var(--bg);
+}
+.row:hover .caption .meta,
+.row:focus-visible .caption .meta {
+  color: var(--bg);
+  opacity: 0.7;
+}
+.row:hover .cover,
+.row:focus-visible .cover {
+  filter: brightness(0.7);
 }
 
 .media {
@@ -309,7 +325,7 @@ h3 {
 .caption h3 {
   font-family: var(--font-body);
   font-size: var(--caption-title);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.15;
 }
 .meta {
@@ -401,7 +417,8 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
   gap: 24px;
-  padding: 26px 0;
+  padding: 26px 12px;
+  margin: 0 -12px;
   border-top: 1px solid var(--line);
 }
 .index-row .num {
@@ -425,9 +442,9 @@ h3 {
   height: 150px;
   flex: none;
 }
-.index-row:hover h2 {
-  text-decoration: underline;
-  text-underline-offset: 6px;
+.index-row:hover,
+.index-row:focus-visible {
+  background: var(--panel);
 }
 
 /* ---------------------------------------------------------- project page */
@@ -438,7 +455,7 @@ h3 {
 .project-head h1 {
   font-family: var(--font-display);
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: var(--h-transform);
 }
 .project-head p {
@@ -483,7 +500,7 @@ h3 {
   flex: 1 1 240px;
   margin: 0;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.7;
 }
 .project-details div {
@@ -601,8 +618,20 @@ h3 {
 .related .caption h3 {
   font-size: 13px;
 }
-.related .card:hover h3 {
-  text-decoration: underline;
+.related .caption {
+  transition: background-color 0.15s, color 0.15s;
+}
+.related .cover {
+  transition: filter 0.15s;
+}
+.related .card:hover .caption,
+.related .card:focus-visible .caption {
+  background: var(--fg);
+  color: var(--bg);
+}
+.related .card:hover .cover,
+.related .card:focus-visible .cover {
+  filter: brightness(0.7);
 }
 
 /* ------------------------------------------------------------- lightbox */
@@ -620,6 +649,29 @@ h3 {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+.lb-figure {
+  margin: 0;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 0;
+}
+.lightbox .lb-figure img {
+  max-height: calc(100vh - 48px);
+}
+.lightbox .lb-figure.has-caption img {
+  max-height: calc(100vh - 110px);
+}
+.lb-caption {
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 70ch;
 }
 .lb-btn {
   position: absolute;
@@ -667,7 +719,7 @@ h3 {
 .field label {
   font-family: var(--input-font);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .field input,
 .field textarea {

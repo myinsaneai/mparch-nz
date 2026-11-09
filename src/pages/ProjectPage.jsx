@@ -29,7 +29,10 @@ function Lightbox({ images, index, onClose, onChange }) {
 
   return (
     <div className="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" onClick={onClose}>
-      <img src={img.url} alt="" onClick={(e) => e.stopPropagation()} />
+      <figure className={img.caption ? 'lb-figure has-caption' : 'lb-figure'} onClick={(e) => e.stopPropagation()}>
+        <img src={img.url} alt={img.caption || ''} />
+        {img.caption && <figcaption className="lb-caption">{img.caption}</figcaption>}
+      </figure>
       <button type="button" className="lb-btn lb-close" aria-label="Close" onClick={onClose}>
         ×
       </button>
@@ -92,7 +95,7 @@ export default function ProjectPage() {
             <button type="button" className="zoom" onClick={() => setViewer(0)} aria-label="Open image">
               <img
                 src={main.url}
-                alt={project.title}
+                alt={main.caption || project.title}
                 width={main.width}
                 height={main.height}
                 style={portrait ? { height: `min(85vh, 900px, ${main.height}px)` } : undefined}
@@ -109,7 +112,7 @@ export default function ProjectPage() {
         <div className="gallery">
           {gallery.map((img, i) => (
             <button type="button" className="zoom" key={img.id} onClick={() => setViewer(i + 1)} aria-label={`Open image ${i + 2}`}>
-              <img src={img.thumbUrl || img.url} alt="" width={img.width} height={img.height} loading="lazy" decoding="async" />
+              <img src={img.thumbUrl || img.url} alt={img.caption || ''} width={img.width} height={img.height} loading="lazy" decoding="async" />
             </button>
           ))}
         </div>
@@ -119,7 +122,7 @@ export default function ProjectPage() {
 
       {related.length > 0 && (
         <section className="related">
-          <h2>You may also like</h2>
+          <h2>Other projects</h2>
           <div className="related-grid">
             {related.map((p) => (
               <Link key={p.id} to={`/project/${p.slug}`} className="card">

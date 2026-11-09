@@ -69,6 +69,17 @@ export default function ProjectEditor() {
     }
   };
 
+  // Caption text is saved when the field loses focus (only if it changed).
+  const saveCaption = async (img, value) => {
+    const caption = value.trim();
+    if (caption === (img.caption || '')) return;
+    try {
+      await persistImages(imagesRef.current.map((i) => (i.id === img.id ? { ...i, caption } : i)));
+    } catch (e) {
+      setNote({ type: 'error', text: e.message });
+    }
+  };
+
   const reorderImages = async (next) => {
     try {
       await persistImages(next);
@@ -247,7 +258,10 @@ export default function ProjectEditor() {
 
       <section className="panel">
         <h2>Images</h2>
-        <p className="muted">The first image is the cover and the large image on the project page. Drag to reorder, or use “Make cover”.</p>
+        <p className="muted">
+          The first image is the cover and the large image on the project page. Drag to reorder, or use “Make cover”. Type a caption under any image; it
+          shows when a visitor opens the image full size, and is saved when you click away.
+        </p>
         <ImageUploader projectId={id} onUploaded={onUploaded} />
         {images.length > 0 && (
           <SortableList
@@ -261,6 +275,17 @@ export default function ProjectEditor() {
                   <img src={img.thumbUrl || img.url} alt={img.name || ''} />
                 </button>
                 {images[0].id === img.id && <span className="badge">Cover</span>}
+                <input
+                  type="text"
+                  className="icaption"
+                  aria-label="Image caption"
+                  placeholder="Caption (optional)"
+                  maxLength={200}
+                  defaultValue={img.caption || ''}
+                  onBlur={(e) => saveCaption(img, e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+                  style={{ width: '100%', boxSizing: 'border-box', marginTop: 6 }}
+                />
                 <figcaption>
                   {images[0].id !== img.id && (
                     <button type="button" className="btn small" onClick={() => makeCover(img)}>

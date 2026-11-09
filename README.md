@@ -5,7 +5,7 @@ Public portfolio with a built-in admin at `/admin`. Hosting, database, file stor
 ## What it does
 
 - **Menus** (Interior Design, Work, Contact by default) come from Firestore, so new menus added in the admin get their own link automatically. A menu can be a project list, a text page, or the contact form.
-- **Project lists** show each project's cover image, title and year. **Project pages** (`/project/<url-name>`) show the main image, your custom fields, a gallery with a lightbox, and "You may also like".
+- **Project lists** show each project's cover image, title and year. **Project pages** (`/project/<url-name>`) show the main image, your custom fields, a gallery with a lightbox, and "Other projects".
 - **Admin** (`/admin`, one email/password account):
   - add, edit and delete projects (deleting also removes every image file from Storage)
   - drag to change the order projects appear in on each list

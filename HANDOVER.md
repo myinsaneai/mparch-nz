@@ -17,7 +17,7 @@ A portfolio website for **Maria Pozdnyakova**, Architectural Designer, BArch (Ho
 1. Design matches the three original screenshots: Work list (alternating image/title panels), Project page, Contact form.
 2. Menus: Interior Design, Work, Contact. More menus can be added later, each with its own link.
 3. Interior Design and Work are project lists. Each project has its own page at its own link.
-4. Project page: title, location, main image, custom detail fields, gallery, "You may also like".
+4. Project page: title, location, main image, custom detail fields, gallery, "Other projects".
 5. Admin: add projects, reorder projects (per list), manage a project, reorder images, delete images, delete projects (with all their image files).
 6. Images resized to max 4K (3840 px long side) before saving to Firebase; smaller images are not upscaled.
 7. Drop zone for image upload.
