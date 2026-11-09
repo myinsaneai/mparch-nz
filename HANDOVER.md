@@ -17,7 +17,7 @@ A portfolio website for **Maria Pozdnyakova**, Architectural Designer, BArch (Ho
 1. Design matches the three original screenshots: Work list (alternating image/title panels), Project page, Contact form.
 2. Menus: Interior Design, Work, Contact. More menus can be added later, each with its own link.
 3. Interior Design and Work are project lists. Each project has its own page at its own link.
-4. Project page: title, location, main image, custom detail fields, gallery, "Other projects".
+4. Project page: title, location, main image, custom detail fields, gallery, "You may also like".
 5. Admin: add projects, reorder projects (per list), manage a project, reorder images, delete images, delete projects (with all their image files).
 6. Images resized to max 4K (3840 px long side) before saving to Firebase; smaller images are not upscaled.
 7. Drop zone for image upload.
@@ -141,6 +141,7 @@ First run on a fresh Firebase project: sign in at `/admin`, open **Site, menus &
 
 - **Contact email:** messages only land in Firestore. Add the "Trigger Email from Firestore" extension or a Cloud Function on `messages/{id}` create (needs the Blaze plan), or a third-party form service.
 - **Spam protection:** only a honeypot field. Consider Firebase App Check if spam appears.
+- **Settings cache:** `SiteContext` keeps the last site settings (menus, name, theme) in `localStorage` (`site-settings-v1`) and shows them instantly on the next visit; on a visitor's very first visit the menu stays empty until Firestore answers, so the built-in default menu never flashes.
 - **Theme fidelity:** themes share three list layouts and the same page structures. Matching a mockup exactly (e.g. Blueprint sidebar) needs component changes.
 - **Bundle size:** main chunk ~690 KB (180 KB gzipped); Vite warns. Could split Firebase/React vendor chunks with `build.rollupOptions.output.manualChunks`.
 - **SEO/sharing:** only a per-page `<title>`. Add meta description and Open Graph tags per project if needed (SPA, so consider prerendering).
