@@ -59,6 +59,11 @@ src/
     defaults.js            Default settings, default project field labels, reserved URL names
     image.js               Resize (max 3840) + thumbnail, upload, delete files, delete project folder
     slug.js
+    layout.js              Page-layout model: grid constants, normalizeLayout, snapping, alignment helpers
+  components/
+    PublicLayout.jsx       Header/nav/footer shell
+    ProjectLayout.jsx      Public renderer of a saved page layout (CSS grid)
+    Legend.jsx             Project details text (shared by public page and editor)
   pages/
     MenuPage.jsx           One route for every menu: dispatches on menu.kind
     ProjectList.jsx        Rows / Grid / Index layouts
@@ -69,6 +74,7 @@ src/
     AdminApp.jsx, AuthContext.jsx, AdminLogin.jsx, AdminLayout.jsx
     ProjectsAdmin.jsx      List, drag-reorder per category, publish toggle, create, delete
     ProjectEditor.jsx      Details, categories, custom fields, images, delete
+    LayoutEditor.jsx       Visual page-layout editor (react-grid-layout), see section 11
     ImageUploader.jsx      Drop zone, 2 parallel uploads
     SortableList.jsx       dnd-kit wrapper
     SettingsAdmin.jsx      Theme picker, site name/subtitle, menus
@@ -125,9 +131,11 @@ First run on a fresh Firebase project: sign in at `/admin`, open **Site, menus &
 
 ## 9. Status
 
-- Public site, admin, theme switching, image pipeline and rules are all implemented, and `npm run build` succeeds.
+- Public site, admin, theme switching, image pipeline, rules and the visual page-layout editor (section 11) are implemented and deployed; `npm run build` succeeds.
+- The public page is 860 px wide on desktop (`.site` in `styles.css`; `PAGE_WIDTH` in `layout.js` must match).
 - The code was written and build-checked without access to the real Firebase project. The owner has since run it and reports it works "more or less", so small issues may remain.
 - Not yet done: real content/images, final choice of design, contact email delivery.
+- Re-upload old images if they were uploaded before the quality fix (originals up to 3840 px are now kept untouched; thumbnails 1600 px).
 
 ## 10. Known gaps and ideas for next steps
 
@@ -161,7 +169,7 @@ Each project page can be arranged visually in the admin (Project editor > "Page 
 ### Moving to free positioning later
 
 The stored numbers are plain cell units, so nothing has to be redone per project. To go finer or fully free:
-1. Increase `COLS` and `ROW_DIV` in `src/lib/layout.js` (for example 192 / 192) and multiply every saved x, y, w, h by the same factor in a one-off migration (the layout stores `cols`, so old and new layouts can be told apart).
+1. Increase `COLS` and `ROW_DIV` in `src/lib/layout.js` (for example 384 / 384) and multiply every saved x, y, w, h by the same factor in a one-off migration (the layout stores `cols`, so old and new layouts can be told apart).
 2. Or replace the editor with a free-drag component (react-rnd or react-moveable) that writes percentages of the page width, and render with absolute positions. The aspect-ratio rule and the phone fallback (stack in reading order) carry over unchanged.
 3. The public renderer and the text-box behaviour (grow instead of clip) stay as they are.
 
@@ -173,7 +181,7 @@ The stored numbers are plain cell units, so nothing has to be redone per project
 
 ## 12. Working with Claude on this
 
-To continue in a new Claude session, share this file plus the repo and say what to change. Useful context:
+`CLAUDE.md` in the repo root is read automatically by Claude Code (VS Code extension or CLI) and points back to this file. For a new chat on claude.ai, attach this file and say what to change. Useful context:
 - Themes: add a `[data-theme='name']` block in `src/styles.css` and an entry in `src/lib/themes.js`.
 - New menu types need a branch in `src/pages/MenuPage.jsx` and an option in `SettingsAdmin.jsx` (`KINDS`).
 - Keep secrets out of chat and out of git: `.env` values, admin password, any service-account JSON.
