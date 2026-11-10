@@ -139,7 +139,7 @@ First run on a fresh Firebase project: sign in at `/admin`, open **Site, menus &
 
 ## 10. Known gaps and ideas for next steps
 
-- **Contact email:** messages only land in Firestore. Add the "Trigger Email from Firestore" extension or a Cloud Function on `messages/{id}` create (needs the Blaze plan), or a third-party form service.
+- **Contact email:** the form sends through EmailJS (template variables `from_name`, `reply_to`, `message`, `h-captcha-response`) behind hCaptcha, then saves a copy to Firestore `messages` (best effort, shown in admin Messages). Keys are `VITE_EMAILJS_*` and `VITE_HCAPTCHA_SITEKEY` in `.env`. hCaptcha is only checked in the browser; a Cloud Function that verifies the token would close that gap.
 - **Spam protection:** only a honeypot field. Consider Firebase App Check if spam appears.
 - **Settings cache:** `SiteContext` keeps the last site settings (menus, name, theme) in `localStorage` (`site-settings-v1`) and shows them instantly on the next visit; on a visitor's very first visit the menu stays empty until Firestore answers, so the built-in default menu never flashes.
 - **Theme fidelity:** themes share three list layouts and the same page structures. Matching a mockup exactly (e.g. Blueprint sidebar) needs component changes.
